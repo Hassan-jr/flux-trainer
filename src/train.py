@@ -13,7 +13,7 @@ def fine_tune_function(params, temp_folder_path):
     config = {
         "job": "extension",
         "config": {
-            "name": params["name"],
+            "name": params["trigger_word"],
             "process": [{
                 "type": "sd_trainer",
                 "training_folder": "output",
@@ -26,8 +26,8 @@ def fine_tune_function(params, temp_folder_path):
                 },
                 "save": {
                     "dtype": "float16",
-                    "save_every": 250,
-                    "max_step_saves_to_keep": 4,
+                    "save_every": None,
+                    "max_step_saves_to_keep": None,
                     "push_to_hub": False
                 },
                 "datasets": [{
@@ -62,7 +62,7 @@ def fine_tune_function(params, temp_folder_path):
                 },
                 "sample": {
                     "sampler": "flowmatch",
-                    "sample_every": 250,
+                    "sample_every": None,
                     "width": 1024,
                     "height": 1024,
                     "prompts": ["a man holding a sign that says, 'this is a sign'"],

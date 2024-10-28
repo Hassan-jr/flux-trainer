@@ -19,7 +19,7 @@ MODELS = ModelHandler()
 
 # ---------------------------------- Helper ---------------------------------- #
 @torch.inference_mode()
-def generate_image_handler(job):
+def train_handler(job):
     '''
     Handler for Lora training job
     '''
@@ -34,7 +34,7 @@ def generate_image_handler(job):
     
     # Call your lora_train function with the validated parameters
     result = lora_train(
-        name=job_input['name'],
+        image_urls=job_input['image_urls'],
         trigger_word=job_input['trigger_word'],
         model_id=job_input['model_id'],
         caption_dropout_rate=job_input['caption_dropout_rate'],
@@ -52,4 +52,4 @@ def generate_image_handler(job):
     
     return result
 
-runpod.serverless.start({"handler": generate_image_handler})
+runpod.serverless.start({"handler": train_handler})

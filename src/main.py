@@ -2,26 +2,27 @@ import os
 import logging
 from train import fine_tune_function
 from cloudflare_util import upload
+from dataset import download_images
 import shutil
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 def lora_train(
-    name,
+    image_urls,
     trigger_word,
     model_id,
-    caption_dropout_rate=0.0,
-    batch_size=1,
-    steps=2000,
-    optimizer='adamw8bit',
-    lr=1e-4,
-    quantize=True,
-    r2_bucket_name="",
-    r2_access_key_id="",
-    r2_secret_access_key="",
-    r2_endpoint_url="",
-    r2_path_in_bucket="Loras"
+    caption_dropout_rate,
+    batch_size,
+    steps,
+    optimizer,
+    lr,
+    quantize,
+    r2_bucket_name,
+    r2_access_key_id,
+    r2_secret_access_key,
+    r2_endpoint_url,
+    r2_path_in_bucket
 ):
     """
     Lora training function that combines user parameters with default configuration
@@ -31,7 +32,6 @@ def lora_train(
     
     # Folder Paths
     folder_path = os.makedirs(os.path.join(os.getcwd(), "ai-toolkit", "output", model_id), exist_ok=True) or os.path.join(os.getcwd(), "ai-toolkit", "output", model_id)
-    temp_folder_path = folder_path #os.path.join(folder_path, model_id) # this is for config
     dataset_folder_path = os.path.join(folder_path, "images") 
     model_folder_path = os.path.join(folder_path, trigger_word)
     
@@ -109,9 +109,15 @@ def lora_train(
         }
     }
 
+     # Call the function with the images, folder path, and trigger word
+    logging.info('Preparing Dataset...')
+    download_images(image_urls, dataset_folder_path, trigger_word)
+    logging.info('Dataset Preparation Done...')
+
+
     # Start the fine-tuning process
     logging.info('Starting fine-tuning...')
-    status = fine_tune_function(fine_tune_params, temp_folder_path)
+    status = fine_tune_function(fine_tune_params, folder_path)
     logging.info(f"Training status: {status}")
 
     # Check the status of training
@@ -142,6 +148,6 @@ def lora_train(
         logging.error("Training failed, Nothing Uploaded!")
     
     # Clean up temporary folder
-    shutil.rmtree(temp_folder_path)
+    shutil.rmtree(folder_path)
     
     return status
