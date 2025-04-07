@@ -21,8 +21,17 @@ def fine_tune_function(params, temp_folder_path):
                 "trigger_word": params["trigger_word"],
                 "network": {
                     "type": "lora",
-                    "linear": 16,
-                    "linear_alpha": 16
+                    "linear": 32,
+                    "linear_alpha": 32,
+                    "dropout": 0.25, 
+                    "network_kwargs": {  
+                        "only_if_contains": [
+                            "transformer.single_transformer_blocks.5.proj_out",
+                            "transformer.single_transformer_blocks.8.proj_out",
+                            "transformer.single_transformer_blocks.9.proj_out",
+                            "transformer.single_transformer_blocks.10.proj_out"
+                        ]
+                    }
                 },
                 "save": {
                     "dtype": "float16",
