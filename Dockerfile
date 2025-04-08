@@ -4,6 +4,9 @@ FROM runpod/base:0.6.2-cuda12.1.0
 
 ENV HF_HUB_ENABLE_HF_TRANSFER=0
 
+# Install Git
+RUN apt-get update && apt-get install -y git
+
 # Install Python dependencies (Worker Template)
 COPY builder/requirements.txt /requirements.txt
 COPY builder/setup.py /setup.py
@@ -17,8 +20,10 @@ RUN python3.11 /cache_models.py && \
     rm /cache_models.py
 
 # Add src files (Worker Template)
-# ADD src .
-COPY src .
+COPY src ./
+
+# Initialize and update Git submodules
+RUN git submodule update --init --recursive
 
 RUN chmod +x /ai-toolkit/run.py
 
