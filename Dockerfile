@@ -19,6 +19,6 @@ RUN python3.11 /cache_models.py && \
 # Add src files (Worker Template)
 COPY src .
 
-RUN chmod +x /ai-toolkit/run.py
+# RUN chmod +x /ai-toolkit/run.py
 
 CMD python3.11 -u /rp_handler.py
