@@ -172,15 +172,6 @@ def fine_tune_function(params, temp_folder_path):
     # Ensure the temporary folder exists
     os.makedirs(temp_folder_path, exist_ok=True)
     
-    # Log files in current working directory (assumed to be 'src')
-    log_files_in_dir(os.getcwd())
-    # Log files in ai-toolkit folder
-    ai_toolkit_dir = os.path.join(os.getcwd(), 'ai-toolkit')
-    if os.path.isdir(ai_toolkit_dir):
-        log_files_in_dir(ai_toolkit_dir)
-    else:
-        print(f"'ai-toolkit' directory not found at {ai_toolkit_dir}")
-    
     # Create the config structure
     config = {
         "job": "extension",
@@ -283,7 +274,15 @@ def fine_tune_function(params, temp_folder_path):
         status = "success" if result.returncode == 0 else "failed"
     except subprocess.CalledProcessError as e:
         print(f"An error occurred: {e}")
-        print(f"Error output: {e.output}")
+        print(f"Error output: {e}")
+        # Log files in current working directory (assumed to be 'src')
+        log_files_in_dir(os.getcwd())
+        # Log files in ai-toolkit folder
+        ai_toolkit_dir = os.path.join(os.getcwd(), 'ai-toolkit')
+        if os.path.isdir(ai_toolkit_dir):
+            log_files_in_dir(ai_toolkit_dir)
+        else:
+            print(f"'ai-toolkit' directory not found at {ai_toolkit_dir}")
         status = "failed"
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
