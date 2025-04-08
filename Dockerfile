@@ -85,7 +85,7 @@ RUN ln -sf /app/ai-toolkit /ai-toolkit
 
 # Copy your RunPod handler script into the working directory
 # Assumes rp_handler.py is in the root of your build context
-COPY rp_handler.py /app/rp_handler.py
+# COPY rp_handler.py /app/rp_handler.py
 
 # --- IMPORTANT ---
 # Ensure rp_handler.py contains the logic to:
