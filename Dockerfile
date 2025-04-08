@@ -20,4 +20,6 @@ RUN python3.11 /cache_models.py && \
 # ADD src .
 COPY src .
 
+RUN chmod +x /ai-toolkit/run.py
+
 CMD python3.11 -u /rp_handler.py
