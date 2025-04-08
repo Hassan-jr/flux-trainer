@@ -167,6 +167,6 @@ def lora_train(
             print(f"'ai-toolkit' directory not found at {ai_toolkit_dir}")
     
     # Clean up temporary folder
-    shutil.rmtree(folder_path)
+    # shutil.rmtree(folder_path)
     
     return status

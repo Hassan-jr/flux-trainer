@@ -154,8 +154,10 @@
 import subprocess
 import os
 import yaml
+import logging
 
 
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 def fine_tune_function(params, temp_folder_path):
     """
@@ -258,18 +260,18 @@ def fine_tune_function(params, temp_folder_path):
         return "failed"
     
     # Change the command to use python3.11 to match your Dockerfile
-    cmd = f"python3.11 {run_script_path} {config_path}"
+    cmd = f"python {run_script_path} {config_path}"
     
     try:
         result = subprocess.run(cmd, shell=True, check=True, capture_output=True, text=True)
         print(result.stdout)  # Print the output
         status = "success" if result.returncode == 0 else "failed"
     except subprocess.CalledProcessError as e:
-        print(f"An error occurred: {e}")
+        logging.info(f"An error occurred: {e}")
         print(f"Error output: {e}")
         status = "failed"
     except Exception as e:
-        print(f"An unexpected error occurred: {e}")
+        logging.info(f"An unexpected error occurred: {e}")
         status = "failed"
 
     return status

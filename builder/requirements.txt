@@ -1,11 +1,12 @@
 runpod~=1.7.4
 hf_transfer
 
-torch
-torchvision
+torch==2.6.0
+torchvision==0.21.0
+torchao==0.9.0
 safetensors
-git+https://github.com/huggingface/diffusers.git
-transformers
+git+https://github.com/huggingface/diffusers@363d1ab7e24c5ed6c190abb00df66d9edb74383b
+transformers==4.49.0
 lycoris-lora==1.8.3
 flatten_json
 pyyaml
@@ -22,7 +23,7 @@ pydantic
 omegaconf
 k-diffusion
 open_clip_torch
-timm==1.0.9
+timm
 prodigyopt
 controlnet_aux==0.0.7
 python-dotenv
@@ -36,3 +37,5 @@ huggingface_hub
 peft
 gradio
 python-slugify
+opencv-python
+pytorch-wavelets==1.3.0
