@@ -8,6 +8,17 @@ import shutil
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
+def log_files_in_dir(directory):
+    try:
+        all_entries = os.listdir(directory)
+        files = [entry for entry in all_entries if os.path.isfile(os.path.join(directory, entry))]
+        logging.info(f"Files in '{directory}':")
+        for file in files:
+            logging.info(f" - {file}")
+    except Exception as e:
+        logging.info(f"Error listing files in '{directory}': {e}")
+
+
 def lora_train(
     image_urls,
     trigger_word,
@@ -146,6 +157,14 @@ def lora_train(
                 logging.info("Async upload initiated. Check logs for results.")
     else:
         logging.error("Training failed, Nothing Uploaded!")
+        # Log files in current working directory (assumed to be 'src')
+        log_files_in_dir(os.getcwd())
+        # Log files in ai-toolkit folder
+        ai_toolkit_dir = os.path.join(os.getcwd(), 'ai-toolkit')
+        if os.path.isdir(ai_toolkit_dir):
+            log_files_in_dir(ai_toolkit_dir)
+        else:
+            print(f"'ai-toolkit' directory not found at {ai_toolkit_dir}")
     
     # Clean up temporary folder
     shutil.rmtree(folder_path)
