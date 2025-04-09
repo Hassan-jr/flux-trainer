@@ -248,13 +248,23 @@ def fine_tune_function(params, temp_folder_path):
         yaml.safe_dump(config, f, sort_keys=False)
     
     # Get the path to run.py
-    current_path = os.getcwd()
-    run_script_path = os.path.join(current_path, 'ai-toolkit', 'run.py')
+    # current_path = os.getcwd()
+    # run_script_path = os.path.join(current_path, 'ai-toolkit', 'run.py')
     
-    # Run the training script
-    cmd = f"python {run_script_path} {config_path}"
+    # # Run the training script
+    # cmd = f"python {run_script_path} {config_path}"
+     # Get the absolute path to the ai-toolkit directory
+    original_dir = os.getcwd()
+    toolkit_dir = os.path.join(original_dir, 'ai-toolkit')
+    
+    # Convert config_path to a path relative to the ai-toolkit directory if needed
+    config_path_relative = os.path.relpath(config_path, start=toolkit_dir)
+
+    # Build the command so that it can be executed from the ai-toolkit directory
+    cmd = f"python run.py {config_path_relative}"
     
     try:
+        os.chdir(toolkit_dir)
         result = subprocess.run(cmd, shell=True, check=True, capture_output=True, text=True)
         print(result.stdout)  # Print the output
         if result.returncode == 0:
@@ -268,5 +278,8 @@ def fine_tune_function(params, temp_folder_path):
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
         status = "failed"
+    finally:
+        # Change back to the original directory
+        os.chdir(original_dir)
 
     return status
