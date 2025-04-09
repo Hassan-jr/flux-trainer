@@ -174,8 +174,8 @@ def fine_tune_function(params, temp_folder_path):
                 "trigger_word": params["trigger_word"],
                 "network": {
                     "type": "lora",
-                    "linear": 256,
-                    "linear_alpha": 256,
+                    "linear": 512,
+                    "linear_alpha": 512,
                     "dropout": 0.25, 
                     "network_kwargs": {  
                         "only_if_contains": [
