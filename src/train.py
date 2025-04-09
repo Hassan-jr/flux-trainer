@@ -187,7 +187,7 @@ def fine_tune_function(params, temp_folder_path):
                     }
                 },
                 "save": {
-                    "dtype": "float16",
+                    "dtype": "float32",
                     "save_every": None,
                     "max_step_saves_to_keep": None,
                     "push_to_hub": False
