@@ -154,10 +154,6 @@
 import subprocess
 import os
 import yaml
-import logging
-
-
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 def fine_tune_function(params, temp_folder_path):
     """
@@ -166,20 +162,20 @@ def fine_tune_function(params, temp_folder_path):
     # Ensure the temporary folder exists
     os.makedirs(temp_folder_path, exist_ok=True)
     
-    # Create the config structure
+    # Create the config structure matching your original yaml
     config = {
         "job": "extension",
         "config": {
             "name": params["trigger_word"],
             "process": [{
                 "type": "sd_trainer",
-                "training_folder": "output",
+                "training_folder": params["training_folder"],
                 "device": "cuda:0",
                 "trigger_word": params["trigger_word"],
                 "network": {
                     "type": "lora",
-                    "linear": 32,
-                    "linear_alpha": 32,
+                    "linear": 16,
+                    "linear_alpha": 16,
                     "dropout": 0.25, 
                     "network_kwargs": {  
                         "only_if_contains": [
@@ -251,27 +247,26 @@ def fine_tune_function(params, temp_folder_path):
     with open(config_path, 'w') as f:
         yaml.safe_dump(config, f, sort_keys=False)
     
-    # Get the full path to run.py
+    # Get the path to run.py
     current_path = os.getcwd()
     run_script_path = os.path.join(current_path, 'ai-toolkit', 'run.py')
     
-    if not os.path.exists(run_script_path):
-        print(f"run.py not found at {run_script_path}")
-        return "failed"
-    
-    # Change the command to use python3.11 to match your Dockerfile
+    # Run the training script
     cmd = f"python {run_script_path} {config_path}"
     
     try:
         result = subprocess.run(cmd, shell=True, check=True, capture_output=True, text=True)
         print(result.stdout)  # Print the output
-        status = "success" if result.returncode == 0 else "failed"
+        if result.returncode == 0:
+            status = "success"
+        else:
+            status = "failed"
     except subprocess.CalledProcessError as e:
-        logging.info(f"An error occurred: {e}")
-        print(f"Error output: {e}")
+        print(f"An error occurred: {e}")
+        print(f"Error output: {e.output}")
         status = "failed"
     except Exception as e:
-        logging.info(f"An unexpected error occurred: {e}")
+        print(f"An unexpected error occurred: {e}")
         status = "failed"
 
     return status
