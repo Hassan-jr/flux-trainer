@@ -29,7 +29,7 @@ def get_diffusion_pipelines():
     }
 
     pipe = fetch_pretrained_model(FluxPipeline,
-                                  "black-forest-labs/FLUX.1-schnell", **common_args)
+                                  "black-forest-labs/FLUX.1-dev", **common_args)
 
 
     return pipe

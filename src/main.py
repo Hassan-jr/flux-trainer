@@ -99,8 +99,7 @@ def lora_train(
         
         # Model configuration
         "model": {
-            "name_or_path": "black-forest-labs/FLUX.1-schnell",
-            "assistant_lora_path": "ostris/FLUX.1-schnell-training-adapter",
+            "name_or_path": "black-forest-labs/FLUX.1-dev",
             "is_flux": True,
             "quantize": quantize
         },
